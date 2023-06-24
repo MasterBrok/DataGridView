@@ -1,0 +1,179 @@
+﻿<Window x:Class="DataGrid.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DataGrid"
+        xmlns:data="clr-namespace:DataGrid.Data"
+        xmlns:models="clr-namespace:DataGrid.Models"
+        mc:Ignorable="d"
+        MouseDown="Window_MouseDown"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Height="450" Width="800">
+    <Window.Resources>
+
+        <!--Mouse Enter in Rows-->
+        <SolidColorBrush x:Key="isMouseOverForeground" Color="White"/>
+
+        <!--Style And Template Header-->
+        <Style x:Key="LabelColumnHeader" TargetType="Label">
+            <Setter Property="Foreground" Value="Pink"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Label">
+                        <Grid>
+                            <ContentPresenter />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--Style TextBlock In Cells-->
+        <Style x:Key="TextBlockInRows" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource isMouseOverForeground}"/>
+            <Setter Property="FontFamily" Value="Californian FB"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+
+    </Window.Resources>
+    <Grid Background="Black">
+
+        <DataGrid x:Name="dgUsers">
+
+            <!--Style DataGrid-->
+            <DataGrid.Style>
+                <Style TargetType="DataGrid">
+                    <Setter Property="Width" Value="520"/>
+                    <Setter Property="Height" Value="420"/>
+                    <Setter Property="BorderBrush" Value="Pink"/>
+                    <Setter Property="AutoGenerateColumns" Value="False"/>
+                    <Setter Property="CanUserResizeColumns" Value="False"/>
+                    <Setter Property="Background" Value="#21021B"/>
+                </Style>
+            </DataGrid.Style>
+
+            <!--Style And Template Rows And Cells-->
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Grid x:Name="GrdHeader" Margin="5 0" Background="#0D010A">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                        Grid.Column="0"
+                                        x:Name="lblColumnCode"
+                                        Content="Code"
+                                        Width="30"
+                                        HorizontalContentAlignment="Center"
+                                        Style="{StaticResource LabelColumnHeader}"/>
+
+                                    <Label
+                                        Margin="60 0"
+                                        Grid.Column="1" x:Name="lblColumnName" Content="Name" Width="80"
+                                        Style="{StaticResource LabelColumnHeader}"/>
+                                    <Label
+                                        Margin="0 0 24 0"
+                                        Grid.Column="2" x:Name="lblColumnFamily" Content="Family" Width="80"
+                                        Style="{StaticResource LabelColumnHeader}"/>
+                                    <Label
+                                        Margin="0 0 10 0"
+                                        Grid.Column="3" x:Name="lblColumnPhoneNumber" Content="PhoneNumber" Width="90"
+                                        Style="{StaticResource LabelColumnHeader}"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+            <!--Style Rows-->
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridRow">
+                                <Grid Background="Transparent">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.ColumnSpan="4"
+                                            Height="2"
+                                            VerticalAlignment="Bottom"
+                                            BorderBrush="LightSalmon"
+                                            BorderThickness="0.5"
+                                            />
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Center"
+                                        Text="{Binding Code}"
+                                        Style="{StaticResource TextBlockInRows}"
+                                        Width="{Binding ElementName=lblColumnCode,Path=Width}" />
+
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        TextWrapping="Wrap"
+                                        Style="{StaticResource TextBlockInRows}"
+                                        Text="{Binding Name}"
+                                        Width="{Binding ElementName=lblColumnName,Path=Width}" />
+
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Text="{Binding Family}"
+                                        Style="{StaticResource TextBlockInRows}"
+                                        Width="{Binding ElementName=lblColumnFamily,Path=Width}" />
+
+                                    <TextBlock
+                                        Grid.Column="3"
+                                        Text="{Binding PhoneNumber}"
+                                        Style="{StaticResource TextBlockInRows}"
+                                        Width="{Binding ElementName=lblColumnPhoneNumber,Path=Width}"/>
+
+                                    <Grid.Triggers>
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard x:Name="bgMouseChangeBackground">
+                                                <Storyboard>
+                                                    <ColorAnimationUsingKeyFrames
+                                                        Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                                                        Duration="0:0:3"
+                                                        >
+                                                        <ColorAnimationUsingKeyFrames.KeyFrames>
+                                                            <LinearColorKeyFrame KeyTime="0:0:1.5"
+                                                                                 Value="#6E646C"/>
+                                                        </ColorAnimationUsingKeyFrames.KeyFrames>
+                                                    </ColorAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <RemoveStoryboard BeginStoryboardName="bgMouseChangeBackground"/>
+                                        </EventTrigger>
+                                    </Grid.Triggers>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowStyle>
+
+        </DataGrid>
+
+    </Grid>
+</Window>
